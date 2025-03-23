@@ -25,6 +25,7 @@ pub enum NativeQueryType {
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub enum NativeQuery {
+    #[serde(rename_all = "camelCase")]
     Timeseries {
         query_type: NativeQueryType,
         data_source: DataSource,
@@ -38,6 +39,7 @@ pub enum NativeQuery {
         context: Option<Context>,
     },
 
+    #[serde(rename_all = "camelCase")]
     TopN {
         query_type: NativeQueryType,
         data_source: String,
@@ -52,6 +54,7 @@ pub enum NativeQuery {
         context: Option<Context>,
     },
 
+    #[serde(rename_all = "camelCase")]
     GroupBy {
         query_type: NativeQueryType,
         data_source: DataSource,
@@ -67,6 +70,7 @@ pub enum NativeQuery {
         context: Option<Context>,
     },
 
+    #[serde(rename_all = "camelCase")]
     TimeBoundary {
         query_type: NativeQueryType,
         data_source: DataSource,
@@ -75,6 +79,7 @@ pub enum NativeQuery {
         context: Option<Context>,
     },
 
+    #[serde(rename_all = "camelCase")]
     SegmentMetadata {
         query_type: NativeQueryType,
         data_source: DataSource,
@@ -86,12 +91,14 @@ pub enum NativeQuery {
         lenient_aggregator_merge: Option<bool>,
     },
 
+    #[serde(rename_all = "camelCase")]
     DatasourceMetadata {
         query_type: NativeQueryType,
         data_source: DataSource,
         context: Option<Context>,
     },
 
+    #[serde(rename_all = "camelCase")]
     Scan {
         query_type: NativeQueryType,
         data_source: DataSource,
@@ -103,6 +110,7 @@ pub enum NativeQuery {
         context: Option<Context>,
     },
 
+    #[serde(rename_all = "camelCase")]
     Search {
         query_type: NativeQueryType,
         data_source: DataSource,
@@ -117,7 +125,6 @@ pub enum NativeQuery {
     },
 }
 
-// Specs
 #[derive(Default, Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Context {
