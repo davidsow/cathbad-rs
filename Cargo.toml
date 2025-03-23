@@ -1,0 +1,8 @@
+[package]
+name = "cathbad-rs"
+version = "0.1.0"
+edition = "2024"
+authors = ["Kleo Davidson (davidsow / faceplate-kleo)"]
+
+[dependencies]
+serde = { version = "1.0.218", features = ["derive"] }
