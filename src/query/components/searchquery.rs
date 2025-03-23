@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
+use crate::query::components::model::QueryComponent;
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub enum SearchQueryType {
     InsensitiveContains,
@@ -33,4 +34,23 @@ pub enum SearchQuery {
         type_: SearchQueryType,
         pattern: String,
     },
+}
+
+impl QueryComponent for SearchQuery {
+    fn validate_type(&self) -> bool {
+        match self {
+            SearchQuery::InsensitiveContains { type_,  .. } => {
+                *type_ == SearchQueryType::InsensitiveContains
+            }
+            SearchQuery::Fragment { type_,  .. } => {
+                *type_ == SearchQueryType::Fragment
+            }
+            SearchQuery::Contains { type_,  .. } => {
+                *type_ == SearchQueryType::Contains
+            }
+            SearchQuery::Regex { type_,  .. } => {
+                *type_ == SearchQueryType::Regex
+            }
+        }
+    }
 }

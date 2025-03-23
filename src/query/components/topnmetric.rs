@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
+use crate::query::components::model::QueryComponent;
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub enum TopNMetricSpecType {
     Numeric,
@@ -11,7 +12,7 @@ pub enum TopNMetricSpecType {
 pub enum TopNMetricSpec {
     Numeric {
         #[serde(rename = "type")]
-        _type: TopNMetricSpecType,
+        type_: TopNMetricSpecType,
         metric: String,
     },
     Dimension {
@@ -20,4 +21,17 @@ pub enum TopNMetricSpec {
         ordering: Option<String>,
         previous_stop: Option<String>,
     },
+}
+
+impl QueryComponent for TopNMetricSpec {
+    fn validate_type(&self) -> bool {
+        match self {
+            TopNMetricSpec::Numeric { type_, .. } => {
+                *type_ == TopNMetricSpecType::Numeric
+            }
+            TopNMetricSpec::Dimension { type_, .. } => {
+                *type_ == TopNMetricSpecType::Dimension
+            }
+        }
+    }
 }
