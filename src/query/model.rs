@@ -56,7 +56,7 @@ pub enum NativeQuery {
         query_type: NativeQueryType,
         data_source: DataSource,
         dimensions: Vec<Dimension>,
-        limit_spec: Option<Limit>,
+        limit_spec: Option<LimitSpec>,
         having: Option<Having>,
         granularity: Granularity,
         filter: Option<Filter>,
