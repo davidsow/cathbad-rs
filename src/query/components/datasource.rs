@@ -14,6 +14,7 @@ pub enum DataSourceType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(untagged)]
 pub enum DataSource {
     String(String),
 

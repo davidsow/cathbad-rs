@@ -36,6 +36,7 @@ pub enum AggregationType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(untagged)]
 pub enum Aggregation {
     Count {
         #[serde(rename = "type")]
@@ -140,6 +141,7 @@ pub enum PostAggregationType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(untagged)]
 pub enum PostAggregation {
     Arithmetic {
         #[serde(rename = "type")]

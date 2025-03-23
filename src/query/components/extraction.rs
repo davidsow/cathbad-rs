@@ -22,6 +22,7 @@ pub enum ExtractionFunctionType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(untagged)]
 pub enum ExtractionFunction {
     #[serde(rename_all = "camelCase")]
     Regex {

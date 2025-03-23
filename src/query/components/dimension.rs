@@ -13,7 +13,7 @@ pub enum DimensionSpecType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(untagged)]
 pub enum DimensionSpec {
     Default {
         #[serde(rename = "type")]

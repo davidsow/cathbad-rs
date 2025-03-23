@@ -16,6 +16,7 @@ pub enum HavingType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(untagged)]
 pub enum Having {
     Filter {
         #[serde(rename = "type")]

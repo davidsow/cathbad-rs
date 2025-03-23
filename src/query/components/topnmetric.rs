@@ -9,6 +9,7 @@ pub enum TopNMetricSpecType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(untagged)]
 pub enum TopNMetricSpec {
     Numeric {
         #[serde(rename = "type")]

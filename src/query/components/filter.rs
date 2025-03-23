@@ -22,7 +22,7 @@ pub enum FilterType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
+#[serde(untagged, rename_all = "camelCase")]
 pub enum Filter {
     Selector {
         #[serde(rename = "type")]

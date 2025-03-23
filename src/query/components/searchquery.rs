@@ -11,6 +11,7 @@ pub enum SearchQueryType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(untagged)]
 pub enum SearchQuery {
     InsensitiveContains {
         #[serde(rename = "type")]

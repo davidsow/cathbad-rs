@@ -10,6 +10,7 @@ pub enum ToIncludeType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(untagged)]
 pub enum ToInclude {
     All {
         #[serde(rename = "type")]
