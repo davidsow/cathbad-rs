@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use crate::query::{FloatingPointNumber, IntegerNumber};
+use serde::{Deserialize, Serialize};
 
 #[derive(Default, Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]

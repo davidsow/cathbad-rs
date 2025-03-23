@@ -1,6 +1,6 @@
+use crate::query::components::model::QueryComponent;
 use crate::query::{ExtractionFunction, OutputType};
 use serde::{Deserialize, Serialize};
-use crate::query::components::model::QueryComponent;
 
 #[derive(Debug, Clone, Deserialize, Serialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -60,19 +60,13 @@ pub enum DimensionSpec {
 impl QueryComponent for DimensionSpec {
     fn validate_type(&self) -> bool {
         match self {
-            DimensionSpec::Default { type_,  .. } => {
-                *type_ == DimensionSpecType::Default
-            }
-            DimensionSpec::Extraction { type_,  .. } => {
-                *type_ == DimensionSpecType::Extraction
-            }
-            DimensionSpec::ListFiltered { type_,  .. } => {
-                *type_ == DimensionSpecType::ListFiltered
-            }
-            DimensionSpec::RegexFiltered { type_,  .. } => {
+            DimensionSpec::Default { type_, .. } => *type_ == DimensionSpecType::Default,
+            DimensionSpec::Extraction { type_, .. } => *type_ == DimensionSpecType::Extraction,
+            DimensionSpec::ListFiltered { type_, .. } => *type_ == DimensionSpecType::ListFiltered,
+            DimensionSpec::RegexFiltered { type_, .. } => {
                 *type_ == DimensionSpecType::RegexFiltered
             }
-            DimensionSpec::PrefixFiltered { type_,  .. } => {
+            DimensionSpec::PrefixFiltered { type_, .. } => {
                 *type_ == DimensionSpecType::PrefixFiltered
             }
         }
@@ -83,7 +77,7 @@ impl QueryComponent for Vec<DimensionSpec> {
     fn validate_type(&self) -> bool {
         for dim in self {
             if !dim.validate_type() {
-                return false
+                return false;
             }
         }
         true

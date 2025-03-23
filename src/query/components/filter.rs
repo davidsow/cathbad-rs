@@ -1,6 +1,6 @@
+use crate::query::components::model::QueryComponent;
 use crate::query::{Expression, ExtractionFunction, Interval, SearchQuery, Sort};
 use serde::{Deserialize, Serialize};
-use crate::query::components::model::QueryComponent;
 
 #[derive(Debug, Clone, Deserialize, Serialize, Eq, PartialEq)]
 #[serde(rename_all = "snake_case")]
@@ -119,56 +119,26 @@ pub enum Filter {
 impl QueryComponent for Filter {
     fn validate_type(&self) -> bool {
         match self {
-            Filter::Selector { type_,  .. } => {
-                *type_ == FilterType::Selector
-            }
-            Filter::ColumnComparison { type_,  .. } => {
-                *type_ == FilterType::ColumnComparison
-            }
-            Filter::Regex { type_,  .. } => {
-                *type_ == FilterType::Regex
-            }
-            Filter::And { type_,  .. } => {
-                *type_ == FilterType::And
-            }
-            Filter::Or { type_,  .. } => {
-                *type_ == FilterType::Or
-            }
-            Filter::Not { type_,  .. } => {
-                *type_ == FilterType::Not
-            }
-            Filter::Javascript { type_,  .. } => {
-                *type_ == FilterType::Javascript
-            }
-            Filter::Search { type_,  .. } => {
-                *type_ == FilterType::Search
-            }
-            Filter::In { type_,  .. } => {
-                *type_ == FilterType::In
-            }
-            Filter::Like { type_,  .. } => {
-                *type_ == FilterType::Like
-            }
-            Filter::Bound { type_,  .. } => {
-                *type_ == FilterType::Bound
-            }
-            Filter::Interval { type_,  .. } => {
-                *type_ == FilterType::Interval
-            }
-            Filter::True { type_,  .. } => {
-                *type_ == FilterType::True
-            }
-            Filter::Expression { type_,  .. } => {
-                *type_ == FilterType::Expression
-            }
+            Filter::Selector { type_, .. } => *type_ == FilterType::Selector,
+            Filter::ColumnComparison { type_, .. } => *type_ == FilterType::ColumnComparison,
+            Filter::Regex { type_, .. } => *type_ == FilterType::Regex,
+            Filter::And { type_, .. } => *type_ == FilterType::And,
+            Filter::Or { type_, .. } => *type_ == FilterType::Or,
+            Filter::Not { type_, .. } => *type_ == FilterType::Not,
+            Filter::Javascript { type_, .. } => *type_ == FilterType::Javascript,
+            Filter::Search { type_, .. } => *type_ == FilterType::Search,
+            Filter::In { type_, .. } => *type_ == FilterType::In,
+            Filter::Like { type_, .. } => *type_ == FilterType::Like,
+            Filter::Bound { type_, .. } => *type_ == FilterType::Bound,
+            Filter::Interval { type_, .. } => *type_ == FilterType::Interval,
+            Filter::True { type_, .. } => *type_ == FilterType::True,
+            Filter::Expression { type_, .. } => *type_ == FilterType::Expression,
         }
     }
 }
 
 impl QueryComponent for Option<Filter> {
     fn validate_type(&self) -> bool {
-        self.clone().is_none_or(|filter| {
-            filter.validate_type()
-        })
+        self.clone().is_none_or(|filter| filter.validate_type())
     }
 }

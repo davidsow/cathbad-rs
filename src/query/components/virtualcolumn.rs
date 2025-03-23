@@ -1,11 +1,11 @@
+use crate::query::components::model::QueryComponent;
 use crate::query::{Expression, OutputType};
 use serde::{Deserialize, Serialize};
-use crate::query::components::model::QueryComponent;
 
 #[derive(Debug, Clone, Deserialize, Serialize, Eq, PartialEq)]
-#[serde(rename_all="camelCase")]
+#[serde(rename_all = "camelCase")]
 pub enum VirtualColumnType {
-    VirtualColumn
+    VirtualColumn,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -20,7 +20,7 @@ pub struct VirtualColumn {
 impl QueryComponent for VirtualColumn {
     fn validate_type(&self) -> bool {
         match self.type_ {
-            VirtualColumnType::VirtualColumn => {true} // this is redundant now but is future-proofing against new variants
+            VirtualColumnType::VirtualColumn => true, // this is redundant now but is future-proofing against new variants
         }
     }
 }

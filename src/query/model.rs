@@ -132,77 +132,90 @@ pub enum NativeQuery {
 impl TypeConstrainedQuery for NativeQuery {
     fn validate_type(&self) -> bool {
         match self {
-            NativeQuery::Timeseries { query_type,  .. } => {
+            NativeQuery::Timeseries { query_type, .. } => {
                 *query_type == NativeQueryType::Timeseries
             }
-            NativeQuery::TopN { query_type,  .. } => {
-                *query_type == NativeQueryType::TopN
-            }
-            NativeQuery::GroupBy { query_type,  .. } => {
-                *query_type == NativeQueryType::GroupBy
-            }
-            NativeQuery::TimeBoundary { query_type,  .. } => {
+            NativeQuery::TopN { query_type, .. } => *query_type == NativeQueryType::TopN,
+            NativeQuery::GroupBy { query_type, .. } => *query_type == NativeQueryType::GroupBy,
+            NativeQuery::TimeBoundary { query_type, .. } => {
                 *query_type == NativeQueryType::TimeBoundary
             }
-            NativeQuery::SegmentMetadata { query_type,  .. } => {
+            NativeQuery::SegmentMetadata { query_type, .. } => {
                 *query_type == NativeQueryType::SegmentMetadata
             }
-            NativeQuery::DatasourceMetadata { query_type,  .. } => {
+            NativeQuery::DatasourceMetadata { query_type, .. } => {
                 *query_type == NativeQueryType::DatasourceMetadata
             }
-            NativeQuery::Scan { query_type,  .. } => {
-                *query_type == NativeQueryType::Scan
-            }
-            NativeQuery::Search { query_type,  .. } => {
-                *query_type == NativeQueryType::Search
-            }
+            NativeQuery::Scan { query_type, .. } => *query_type == NativeQueryType::Scan,
+            NativeQuery::Search { query_type, .. } => *query_type == NativeQueryType::Search,
         }
     }
     fn validate_subcomponents(&self) -> bool {
         match self {
-            NativeQuery::Timeseries { data_source, filter, aggregations, post_aggregations,  .. } => {
-                data_source.validate_type() &&
-                    filter.validate_type() &&
-                    aggregations.validate_type() &&
-                    post_aggregations.validate_type()
-            }
-            NativeQuery::TopN { data_source, filter, aggregations, post_aggregations, dimension, metric, .. } => {
-                data_source.validate_type() &&
-                    filter.validate_type() &&
-                    aggregations.validate_type() &&
-                    post_aggregations.validate_type() &&
-                    dimension.validate_type() &&
-                    metric.validate_type()
-            }
-            NativeQuery::GroupBy { data_source, dimensions, limit_spec, having, filter, aggregations, post_aggregations, .. } => {
-                data_source.validate_type() &&
-                    dimensions.validate_type() &&
-                    limit_spec.validate_type() &&
-                    having.validate_type() &&
-                    filter.validate_type() &&
-                    aggregations.validate_type() &&
-                    post_aggregations.validate_type()
-            }
-            NativeQuery::TimeBoundary { data_source, filter, .. } => {
-                data_source.validate_type() &&
-                    filter.validate_type()
-            }
-            NativeQuery::SegmentMetadata { data_source, to_include, .. } => {
-                data_source.validate_type() &&
-                    to_include.validate_type()
-            }
-            NativeQuery::DatasourceMetadata { data_source, .. } => {
+            NativeQuery::Timeseries {
+                data_source,
+                filter,
+                aggregations,
+                post_aggregations,
+                ..
+            } => {
                 data_source.validate_type()
+                    && filter.validate_type()
+                    && aggregations.validate_type()
+                    && post_aggregations.validate_type()
             }
-            NativeQuery::Scan { data_source, .. } => {
+            NativeQuery::TopN {
+                data_source,
+                filter,
+                aggregations,
+                post_aggregations,
+                dimension,
+                metric,
+                ..
+            } => {
                 data_source.validate_type()
+                    && filter.validate_type()
+                    && aggregations.validate_type()
+                    && post_aggregations.validate_type()
+                    && dimension.validate_type()
+                    && metric.validate_type()
             }
-            NativeQuery::Search { data_source, filter, query, .. } => {
-                data_source.validate_type() &&
-                    filter.validate_type() &&
-                    query.validate_type()
+            NativeQuery::GroupBy {
+                data_source,
+                dimensions,
+                limit_spec,
+                having,
+                filter,
+                aggregations,
+                post_aggregations,
+                ..
+            } => {
+                data_source.validate_type()
+                    && dimensions.validate_type()
+                    && limit_spec.validate_type()
+                    && having.validate_type()
+                    && filter.validate_type()
+                    && aggregations.validate_type()
+                    && post_aggregations.validate_type()
             }
+            NativeQuery::TimeBoundary {
+                data_source,
+                filter,
+                ..
+            } => data_source.validate_type() && filter.validate_type(),
+            NativeQuery::SegmentMetadata {
+                data_source,
+                to_include,
+                ..
+            } => data_source.validate_type() && to_include.validate_type(),
+            NativeQuery::DatasourceMetadata { data_source, .. } => data_source.validate_type(),
+            NativeQuery::Scan { data_source, .. } => data_source.validate_type(),
+            NativeQuery::Search {
+                data_source,
+                filter,
+                query,
+                ..
+            } => data_source.validate_type() && filter.validate_type() && query.validate_type(),
         }
     }
 }
-

@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use crate::query::components::model::QueryComponent;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 #[serde(rename_all = "snake_case")] // ???
@@ -19,9 +19,9 @@ pub enum Granularity {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(rename_all="camelCase")]
+#[serde(rename_all = "camelCase")]
 pub enum GranularitySpecType {
-    GranularitySpec
+    GranularitySpec,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]

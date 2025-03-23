@@ -1,6 +1,6 @@
 use crate::query::Filter;
-use serde::{Deserialize, Serialize};
 use crate::query::components::model::QueryComponent;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -80,52 +80,43 @@ pub enum Aggregation {
 impl QueryComponent for Aggregation {
     fn validate_type(&self) -> bool {
         match self {
-            Aggregation::Count { type_, .. } => {
-                *type_ == AggregationType::Count
-            }
+            Aggregation::Count { type_, .. } => *type_ == AggregationType::Count,
             Aggregation::Statistical { type_, .. } => {
                 // TODO THERE HAS TO BE A BETTER WAY
-                *type_ == AggregationType::LongSum ||
-                *type_ == AggregationType::DoubleSum ||
-                *type_ == AggregationType::FloatSum ||
-                *type_ == AggregationType::DoubleMin ||
-                *type_ == AggregationType::DoubleMax ||
-                *type_ == AggregationType::FloatMin ||
-                *type_ == AggregationType::FloatMax ||
-                *type_ == AggregationType::LongMin ||
-                *type_ == AggregationType::LongMax ||
-                *type_ == AggregationType::DoubleMean ||
-                *type_ == AggregationType::DoubleFirst ||
-                *type_ == AggregationType::DoubleLast ||
-                *type_ == AggregationType::FloatFirst ||
-                *type_ == AggregationType::FloatLast ||
-                *type_ == AggregationType::LongFirst ||
-                *type_ == AggregationType::LongLast ||
-                *type_ == AggregationType::StringFirst ||
-                *type_ == AggregationType::StringLast ||
-                *type_ == AggregationType::DoubleAny ||
-                *type_ == AggregationType::FloatAny ||
-                *type_ == AggregationType::LongAny ||
-                *type_ == AggregationType::StringAny
+                *type_ == AggregationType::LongSum
+                    || *type_ == AggregationType::DoubleSum
+                    || *type_ == AggregationType::FloatSum
+                    || *type_ == AggregationType::DoubleMin
+                    || *type_ == AggregationType::DoubleMax
+                    || *type_ == AggregationType::FloatMin
+                    || *type_ == AggregationType::FloatMax
+                    || *type_ == AggregationType::LongMin
+                    || *type_ == AggregationType::LongMax
+                    || *type_ == AggregationType::DoubleMean
+                    || *type_ == AggregationType::DoubleFirst
+                    || *type_ == AggregationType::DoubleLast
+                    || *type_ == AggregationType::FloatFirst
+                    || *type_ == AggregationType::FloatLast
+                    || *type_ == AggregationType::LongFirst
+                    || *type_ == AggregationType::LongLast
+                    || *type_ == AggregationType::StringFirst
+                    || *type_ == AggregationType::StringLast
+                    || *type_ == AggregationType::DoubleAny
+                    || *type_ == AggregationType::FloatAny
+                    || *type_ == AggregationType::LongAny
+                    || *type_ == AggregationType::StringAny
             }
-            Aggregation::JavaScript { type_, .. } => {
-                *type_ == AggregationType::JavaScript
-            }
-            Aggregation::Filtered { type_, .. } => {
-                *type_ == AggregationType::Filtered
-            }
-            Aggregation::Grouping { type_, .. } => {
-                *type_ == AggregationType::Grouping
-            }
+            Aggregation::JavaScript { type_, .. } => *type_ == AggregationType::JavaScript,
+            Aggregation::Filtered { type_, .. } => *type_ == AggregationType::Filtered,
+            Aggregation::Grouping { type_, .. } => *type_ == AggregationType::Grouping,
         }
     }
 }
 
 impl QueryComponent for Option<Aggregation> {
     fn validate_type(&self) -> bool {
-        self.clone().is_none_or(|aggregation| {
-            aggregation.validate_type()
-        })
+        self.clone()
+            .is_none_or(|aggregation| aggregation.validate_type())
     }
 }
 
@@ -192,23 +183,19 @@ pub enum PostAggregation {
 impl QueryComponent for PostAggregation {
     fn validate_type(&self) -> bool {
         match self {
-            PostAggregation::Arithmetic { type_,  .. } => {
-                *type_ == PostAggregationType::Arithmetic
+            PostAggregation::Arithmetic { type_, .. } => *type_ == PostAggregationType::Arithmetic,
+            PostAggregation::FieldAccessor { type_, .. } => {
+                *type_ == PostAggregationType::FieldAccess
+                    || *type_ == PostAggregationType::FinalizingFieldAccess
             }
-            PostAggregation::FieldAccessor { type_,  .. } => {
-                *type_ == PostAggregationType::FieldAccess ||
-                *type_ == PostAggregationType::FinalizingFieldAccess
+            PostAggregation::Bound { type_, .. } => {
+                *type_ == PostAggregationType::DoubleGreatest
+                    || *type_ == PostAggregationType::LongGreatest
+                    || *type_ == PostAggregationType::DoubleLeast
+                    || *type_ == PostAggregationType::LongLeast
             }
-            PostAggregation::Bound { type_,  .. } => {
-                *type_ == PostAggregationType::DoubleGreatest ||
-                    *type_ == PostAggregationType::LongGreatest ||
-                    *type_ == PostAggregationType::DoubleLeast ||
-                    *type_ == PostAggregationType::LongLeast
-            }
-            PostAggregation::JavaScript { type_,  .. } => {
-                *type_ == PostAggregationType::JavaScript
-            }
-            PostAggregation::HyperUniqueCardinality { type_,  .. } => {
+            PostAggregation::JavaScript { type_, .. } => *type_ == PostAggregationType::JavaScript,
+            PostAggregation::HyperUniqueCardinality { type_, .. } => {
                 *type_ == PostAggregationType::HyperUniqueCardinality
             }
         }
@@ -217,9 +204,8 @@ impl QueryComponent for PostAggregation {
 
 impl QueryComponent for Option<PostAggregation> {
     fn validate_type(&self) -> bool {
-        self.clone().is_none_or(|post_aggregation| {
-            post_aggregation.validate_type()
-        })
+        self.clone()
+            .is_none_or(|post_aggregation| post_aggregation.validate_type())
     }
 }
 
@@ -228,7 +214,7 @@ impl QueryComponent for Option<Vec<PostAggregation>> {
         self.clone().is_none_or(|vector| {
             for agg in vector {
                 if !agg.validate_type() {
-                    return false
+                    return false;
                 }
             }
             true

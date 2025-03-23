@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use crate::query::components::model::QueryComponent;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -29,15 +29,9 @@ pub enum ToInclude {
 impl QueryComponent for ToInclude {
     fn validate_type(&self) -> bool {
         match self {
-            ToInclude::All { type_, .. } => {
-                *type_ == ToIncludeType::All
-            }
-            ToInclude::None { type_, .. } => {
-                *type_ == ToIncludeType::None
-            }
-            ToInclude::List { type_, .. } => {
-                *type_ == ToIncludeType::List
-            }
+            ToInclude::All { type_, .. } => *type_ == ToIncludeType::All,
+            ToInclude::None { type_, .. } => *type_ == ToIncludeType::None,
+            ToInclude::List { type_, .. } => *type_ == ToIncludeType::List,
         }
     }
 }
@@ -47,7 +41,7 @@ impl QueryComponent for Option<Vec<ToInclude>> {
         self.clone().is_none_or(|include_vector| {
             for to_include in include_vector {
                 if !to_include.validate_type() {
-                    return false
+                    return false;
                 }
             }
             true

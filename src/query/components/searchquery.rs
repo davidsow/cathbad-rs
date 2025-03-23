@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use crate::query::components::model::QueryComponent;
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
@@ -39,18 +39,12 @@ pub enum SearchQuery {
 impl QueryComponent for SearchQuery {
     fn validate_type(&self) -> bool {
         match self {
-            SearchQuery::InsensitiveContains { type_,  .. } => {
+            SearchQuery::InsensitiveContains { type_, .. } => {
                 *type_ == SearchQueryType::InsensitiveContains
             }
-            SearchQuery::Fragment { type_,  .. } => {
-                *type_ == SearchQueryType::Fragment
-            }
-            SearchQuery::Contains { type_,  .. } => {
-                *type_ == SearchQueryType::Contains
-            }
-            SearchQuery::Regex { type_,  .. } => {
-                *type_ == SearchQueryType::Regex
-            }
+            SearchQuery::Fragment { type_, .. } => *type_ == SearchQueryType::Fragment,
+            SearchQuery::Contains { type_, .. } => *type_ == SearchQueryType::Contains,
+            SearchQuery::Regex { type_, .. } => *type_ == SearchQueryType::Regex,
         }
     }
 }
