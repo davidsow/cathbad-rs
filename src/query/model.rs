@@ -131,23 +131,16 @@ pub enum NativeQuery {
 
 impl TypeConstrainedQuery for NativeQuery {
     fn validate_type(&self) -> bool {
+        use NativeQueryType::*;
         match self {
-            NativeQuery::Timeseries { query_type, .. } => {
-                *query_type == NativeQueryType::Timeseries
-            }
-            NativeQuery::TopN { query_type, .. } => *query_type == NativeQueryType::TopN,
-            NativeQuery::GroupBy { query_type, .. } => *query_type == NativeQueryType::GroupBy,
-            NativeQuery::TimeBoundary { query_type, .. } => {
-                *query_type == NativeQueryType::TimeBoundary
-            }
-            NativeQuery::SegmentMetadata { query_type, .. } => {
-                *query_type == NativeQueryType::SegmentMetadata
-            }
-            NativeQuery::DatasourceMetadata { query_type, .. } => {
-                *query_type == NativeQueryType::DatasourceMetadata
-            }
-            NativeQuery::Scan { query_type, .. } => *query_type == NativeQueryType::Scan,
-            NativeQuery::Search { query_type, .. } => *query_type == NativeQueryType::Search,
+            NativeQuery::Timeseries { query_type, .. } => *query_type == Timeseries,
+            NativeQuery::TopN { query_type, .. } => *query_type == TopN,
+            NativeQuery::GroupBy { query_type, .. } => *query_type == GroupBy,
+            NativeQuery::TimeBoundary { query_type, .. } => *query_type == TimeBoundary,
+            NativeQuery::SegmentMetadata { query_type, .. } => *query_type == SegmentMetadata,
+            NativeQuery::DatasourceMetadata { query_type, .. } => *query_type == DatasourceMetadata,
+            NativeQuery::Scan { query_type, .. } => *query_type == Scan,
+            NativeQuery::Search { query_type, .. } => *query_type == Search,
         }
     }
     fn validate_subcomponents(&self) -> bool {
