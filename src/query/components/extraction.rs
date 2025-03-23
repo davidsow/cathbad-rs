@@ -129,32 +129,21 @@ pub enum ExtractionFunction {
 
 impl QueryComponent for ExtractionFunction {
     fn validate_type(&self) -> bool {
+        use ExtractionFunctionType::*;
         match self {
-            ExtractionFunction::Regex { type_, .. } => *type_ == ExtractionFunctionType::Regex,
-            ExtractionFunction::Partial { type_, .. } => *type_ == ExtractionFunctionType::Partial,
-            ExtractionFunction::SearchQuery { type_, .. } => {
-                *type_ == ExtractionFunctionType::SearchQuery
-            }
-            ExtractionFunction::Substring { type_, .. } => {
-                *type_ == ExtractionFunctionType::Substring
-            }
-            ExtractionFunction::Strlen { type_, .. } => *type_ == ExtractionFunctionType::Strlen,
-            ExtractionFunction::TimeFormat { type_, .. } => {
-                *type_ == ExtractionFunctionType::TimeFormat
-            }
-            ExtractionFunction::TimeParsing { type_, .. } => {
-                *type_ == ExtractionFunctionType::TimeParsing
-            }
-            ExtractionFunction::JavaScript { type_, .. } => {
-                *type_ == ExtractionFunctionType::JavaScript
-            }
-            ExtractionFunction::Cascade { type_, .. } => *type_ == ExtractionFunctionType::Cascade,
-            ExtractionFunction::StringFormat { type_, .. } => {
-                *type_ == ExtractionFunctionType::StringFormat
-            }
-            ExtractionFunction::Upper { type_, .. } => *type_ == ExtractionFunctionType::Upper,
-            ExtractionFunction::Lower { type_, .. } => *type_ == ExtractionFunctionType::Lower,
-            ExtractionFunction::Bucket { type_, .. } => *type_ == ExtractionFunctionType::Bucket,
+            ExtractionFunction::Regex { type_, .. } => *type_ == Regex,
+            ExtractionFunction::Partial { type_, .. } => *type_ == Partial,
+            ExtractionFunction::SearchQuery { type_, .. } => *type_ == SearchQuery,
+            ExtractionFunction::Substring { type_, .. } => *type_ == Substring,
+            ExtractionFunction::Strlen { type_, .. } => *type_ == Strlen,
+            ExtractionFunction::TimeFormat { type_, .. } => *type_ == TimeFormat,
+            ExtractionFunction::TimeParsing { type_, .. } => *type_ == TimeParsing,
+            ExtractionFunction::JavaScript { type_, .. } => *type_ == JavaScript,
+            ExtractionFunction::Cascade { type_, .. } => *type_ == Cascade,
+            ExtractionFunction::StringFormat { type_, .. } => *type_ == StringFormat,
+            ExtractionFunction::Upper { type_, .. } => *type_ == Upper,
+            ExtractionFunction::Lower { type_, .. } => *type_ == Lower,
+            ExtractionFunction::Bucket { type_, .. } => *type_ == Bucket,
         }
     }
 }

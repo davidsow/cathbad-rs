@@ -59,16 +59,13 @@ pub enum DimensionSpec {
 
 impl QueryComponent for DimensionSpec {
     fn validate_type(&self) -> bool {
+        use DimensionSpecType::*;
         match self {
-            DimensionSpec::Default { type_, .. } => *type_ == DimensionSpecType::Default,
-            DimensionSpec::Extraction { type_, .. } => *type_ == DimensionSpecType::Extraction,
-            DimensionSpec::ListFiltered { type_, .. } => *type_ == DimensionSpecType::ListFiltered,
-            DimensionSpec::RegexFiltered { type_, .. } => {
-                *type_ == DimensionSpecType::RegexFiltered
-            }
-            DimensionSpec::PrefixFiltered { type_, .. } => {
-                *type_ == DimensionSpecType::PrefixFiltered
-            }
+            DimensionSpec::Default { type_, .. } => *type_ == Default,
+            DimensionSpec::Extraction { type_, .. } => *type_ == Extraction,
+            DimensionSpec::ListFiltered { type_, .. } => *type_ == ListFiltered,
+            DimensionSpec::RegexFiltered { type_, .. } => *type_ == RegexFiltered,
+            DimensionSpec::PrefixFiltered { type_, .. } => *type_ == PrefixFiltered,
         }
     }
 }

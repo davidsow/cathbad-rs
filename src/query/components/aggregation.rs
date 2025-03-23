@@ -182,21 +182,21 @@ pub enum PostAggregation {
 
 impl QueryComponent for PostAggregation {
     fn validate_type(&self) -> bool {
+        use PostAggregationType::*;
         match self {
-            PostAggregation::Arithmetic { type_, .. } => *type_ == PostAggregationType::Arithmetic,
+            PostAggregation::Arithmetic { type_, .. } => *type_ == Arithmetic,
             PostAggregation::FieldAccessor { type_, .. } => {
-                *type_ == PostAggregationType::FieldAccess
-                    || *type_ == PostAggregationType::FinalizingFieldAccess
+                *type_ == FieldAccess || *type_ == FinalizingFieldAccess
             }
             PostAggregation::Bound { type_, .. } => {
-                *type_ == PostAggregationType::DoubleGreatest
-                    || *type_ == PostAggregationType::LongGreatest
-                    || *type_ == PostAggregationType::DoubleLeast
-                    || *type_ == PostAggregationType::LongLeast
+                *type_ == DoubleGreatest
+                    || *type_ == LongGreatest
+                    || *type_ == DoubleLeast
+                    || *type_ == LongLeast
             }
-            PostAggregation::JavaScript { type_, .. } => *type_ == PostAggregationType::JavaScript,
+            PostAggregation::JavaScript { type_, .. } => *type_ == JavaScript,
             PostAggregation::HyperUniqueCardinality { type_, .. } => {
-                *type_ == PostAggregationType::HyperUniqueCardinality
+                *type_ == HyperUniqueCardinality
             }
         }
     }

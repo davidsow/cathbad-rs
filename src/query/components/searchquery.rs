@@ -38,13 +38,12 @@ pub enum SearchQuery {
 
 impl QueryComponent for SearchQuery {
     fn validate_type(&self) -> bool {
+        use SearchQueryType::*;
         match self {
-            SearchQuery::InsensitiveContains { type_, .. } => {
-                *type_ == SearchQueryType::InsensitiveContains
-            }
-            SearchQuery::Fragment { type_, .. } => *type_ == SearchQueryType::Fragment,
-            SearchQuery::Contains { type_, .. } => *type_ == SearchQueryType::Contains,
-            SearchQuery::Regex { type_, .. } => *type_ == SearchQueryType::Regex,
+            SearchQuery::InsensitiveContains { type_, .. } => *type_ == InsensitiveContains,
+            SearchQuery::Fragment { type_, .. } => *type_ == Fragment,
+            SearchQuery::Contains { type_, .. } => *type_ == Contains,
+            SearchQuery::Regex { type_, .. } => *type_ == Regex,
         }
     }
 }
