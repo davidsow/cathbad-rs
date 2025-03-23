@@ -1,7 +1,8 @@
 use crate::query::Filter;
 use serde::{Deserialize, Serialize};
+use crate::query::components::model::QueryComponent;
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub enum AggregationType {
     Count,
@@ -76,7 +77,51 @@ pub enum Aggregation {
     },
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+impl QueryComponent for Aggregation {
+    fn validate_type(&self) -> bool {
+        match self {
+            Aggregation::Count { type_, .. } => {
+                *type_ == AggregationType::Count
+            }
+            Aggregation::Statistical { type_, .. } => {
+                // TODO THERE HAS TO BE A BETTER WAY
+                *type_ == AggregationType::LongSum ||
+                *type_ == AggregationType::DoubleSum ||
+                *type_ == AggregationType::FloatSum ||
+                *type_ == AggregationType::DoubleMin ||
+                *type_ == AggregationType::DoubleMax ||
+                *type_ == AggregationType::FloatMin ||
+                *type_ == AggregationType::FloatMax ||
+                *type_ == AggregationType::LongMin ||
+                *type_ == AggregationType::LongMax ||
+                *type_ == AggregationType::DoubleMean ||
+                *type_ == AggregationType::DoubleFirst ||
+                *type_ == AggregationType::DoubleLast ||
+                *type_ == AggregationType::FloatFirst ||
+                *type_ == AggregationType::FloatLast ||
+                *type_ == AggregationType::LongFirst ||
+                *type_ == AggregationType::LongLast ||
+                *type_ == AggregationType::StringFirst ||
+                *type_ == AggregationType::StringLast ||
+                *type_ == AggregationType::DoubleAny ||
+                *type_ == AggregationType::FloatAny ||
+                *type_ == AggregationType::LongAny ||
+                *type_ == AggregationType::StringAny
+            }
+            Aggregation::JavaScript { type_, .. } => {
+                *type_ == AggregationType::JavaScript
+            }
+            Aggregation::Filtered { type_, .. } => {
+                *type_ == AggregationType::Filtered
+            }
+            Aggregation::Grouping { type_, .. } => {
+                *type_ == AggregationType::Grouping
+            }
+        }
+    }
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub enum PostAggregationType {
     Arithmetic,
@@ -134,4 +179,30 @@ pub enum PostAggregation {
         name: String,
         field_name: String,
     },
+}
+
+impl QueryComponent for PostAggregation {
+    fn validate_type(&self) -> bool {
+        match self {
+            PostAggregation::Arithmetic { type_,  .. } => {
+                *type_ == PostAggregationType::Arithmetic
+            }
+            PostAggregation::FieldAccessor { type_,  .. } => {
+                *type_ == PostAggregationType::FieldAccess ||
+                *type_ == PostAggregationType::FinalizingFieldAccess
+            }
+            PostAggregation::Bound { type_,  .. } => {
+                *type_ == PostAggregationType::DoubleGreatest ||
+                    *type_ == PostAggregationType::LongGreatest ||
+                    *type_ == PostAggregationType::DoubleLeast ||
+                    *type_ == PostAggregationType::LongLeast
+            }
+            PostAggregation::JavaScript { type_,  .. } => {
+                *type_ == PostAggregationType::JavaScript
+            }
+            PostAggregation::HyperUniqueCardinality { type_,  .. } => {
+                *type_ == PostAggregationType::HyperUniqueCardinality
+            }
+        }
+    }
 }

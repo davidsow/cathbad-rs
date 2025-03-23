@@ -11,6 +11,7 @@ mod searchquery;
 mod toinclude;
 mod topnmetric;
 mod virtualcolumn;
+mod model;
 
 pub use aggregation::*;
 pub use datasource::*;
