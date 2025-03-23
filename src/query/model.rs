@@ -1,5 +1,5 @@
-use serde::{Deserialize, Serialize};
 use crate::query::components::*;
+use serde::{Deserialize, Serialize};
 
 // Query definitions in this file apply to Druid v0.22.1
 // There may or may not be breaking API changes between this version and latest
@@ -10,7 +10,7 @@ pub type IntegerNumber = u64;
 pub type FloatingPointNumber = f64;
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(rename_all="camelCase")]
+#[serde(rename_all = "camelCase")]
 pub enum NativeQueryType {
     Timeseries,
     TopN,
@@ -19,9 +19,8 @@ pub enum NativeQueryType {
     SegmentMetadata,
     DatasourceMetadata,
     Scan,
-    Search
+    Search,
 }
-
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
 pub enum NativeQuery {
@@ -48,7 +47,7 @@ pub enum NativeQuery {
         filter: Option<Filter>,
         aggregations: Option<Aggregation>,
         post_aggregations: Option<Vec<PostAggregation>>,
-        dimension: Dimension,
+        dimension: DimensionSpec,
         threshold: IntegerNumber,
         metric: TopNMetricSpec,
         context: Option<Context>,
@@ -58,7 +57,7 @@ pub enum NativeQuery {
     GroupBy {
         query_type: NativeQueryType,
         data_source: DataSource,
-        dimensions: Vec<Dimension>,
+        dimensions: Vec<DimensionSpec>,
         limit_spec: Option<LimitSpec>,
         having: Option<Having>,
         granularity: Granularity,
