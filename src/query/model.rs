@@ -28,10 +28,10 @@ pub enum NativeQueryType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(tag="queryType", rename_all="camelCase")]
 pub enum NativeQuery {
-    #[serde(untagged, rename_all = "camelCase")]
+    #[serde(rename_all = "camelCase")]
     Timeseries {
-        query_type: NativeQueryType,
         data_source: DataSource,
         descending: Option<bool>,
         intervals: Vec<Interval>,
@@ -43,9 +43,8 @@ pub enum NativeQuery {
         context: Option<Context>,
     },
 
-    #[serde(untagged, rename_all = "camelCase")]
+    #[serde(rename_all = "camelCase")]
     TopN {
-        query_type: NativeQueryType,
         data_source: DataSource,
         intervals: Vec<Interval>,
         granularity: Granularity,
@@ -58,9 +57,8 @@ pub enum NativeQuery {
         context: Option<Context>,
     },
 
-    #[serde(untagged, rename_all = "camelCase")]
+    #[serde(rename_all = "camelCase")]
     GroupBy {
-        query_type: NativeQueryType,
         data_source: DataSource,
         dimensions: Vec<DimensionSpec>,
         limit_spec: Option<LimitSpec>,
@@ -74,18 +72,16 @@ pub enum NativeQuery {
         context: Option<Context>,
     },
 
-    #[serde(untagged, rename_all = "camelCase")]
+    #[serde(rename_all = "camelCase")]
     TimeBoundary {
-        query_type: NativeQueryType,
         data_source: DataSource,
         bound: Option<Bound>,
         filter: Option<Filter>,
         context: Option<Context>,
     },
 
-    #[serde(untagged, rename_all = "camelCase")]
+    #[serde(rename_all = "camelCase")]
     SegmentMetadata {
-        query_type: NativeQueryType,
         data_source: DataSource,
         intervals: Option<Vec<Interval>>,
         to_include: Option<Vec<ToInclude>>,
@@ -95,16 +91,14 @@ pub enum NativeQuery {
         lenient_aggregator_merge: Option<bool>,
     },
 
-    #[serde(untagged, rename_all = "camelCase")]
+    #[serde(rename_all = "camelCase")]
     DatasourceMetadata {
-        query_type: NativeQueryType,
         data_source: DataSource,
         context: Option<Context>,
     },
 
-    #[serde(untagged, rename_all = "camelCase")]
+    #[serde(rename_all = "camelCase")]
     Scan {
-        query_type: NativeQueryType,
         data_source: DataSource,
         intervals: Vec<Interval>,
         result_format: Option<ResultFormat>,
@@ -114,9 +108,8 @@ pub enum NativeQuery {
         context: Option<Context>,
     },
 
-    #[serde(untagged, rename_all = "camelCase")]
+    #[serde(rename_all = "camelCase")]
     Search {
-        query_type: NativeQueryType,
         data_source: DataSource,
         granularity: Option<Granularity>,
         filter: Option<Filter>,
@@ -131,16 +124,16 @@ pub enum NativeQuery {
 
 impl TypeConstrainedQuery for NativeQuery {
     fn validate_type(&self) -> bool {
-        use NativeQueryType::*;
         match self {
-            NativeQuery::Timeseries { query_type, .. } => *query_type == Timeseries,
-            NativeQuery::TopN { query_type, .. } => *query_type == TopN,
-            NativeQuery::GroupBy { query_type, .. } => *query_type == GroupBy,
-            NativeQuery::TimeBoundary { query_type, .. } => *query_type == TimeBoundary,
-            NativeQuery::SegmentMetadata { query_type, .. } => *query_type == SegmentMetadata,
-            NativeQuery::DatasourceMetadata { query_type, .. } => *query_type == DatasourceMetadata,
-            NativeQuery::Scan { query_type, .. } => *query_type == Scan,
-            NativeQuery::Search { query_type, .. } => *query_type == Search,
+            // TODO
+            NativeQuery::Timeseries { .. } => true,
+            NativeQuery::TopN { .. } => true,
+            NativeQuery::GroupBy { .. } => true,
+            NativeQuery::TimeBoundary { .. } => true,
+            NativeQuery::SegmentMetadata { .. } => true,
+            NativeQuery::DatasourceMetadata { .. } => true,
+            NativeQuery::Scan { .. } => true,
+            NativeQuery::Search { .. } => true,
         }
     }
     fn validate_subcomponents(&self) -> bool {
@@ -219,7 +212,6 @@ mod tests {
     #[test]
     fn test_basic_serde() {
         let query_basic = NativeQuery::Search {
-            query_type: NativeQueryType::Search,
             data_source: DataSource::String("example".to_string()),
             granularity: None,
             filter: None,
@@ -227,7 +219,6 @@ mod tests {
             intervals: vec![],
             search_dimensions: None,
             query: SearchQuery::InsensitiveContains {
-                type_: SearchQueryType::InsensitiveContains,
                 value: "DUMMY_VALUE".to_string(),
             },
             sort: None,
@@ -242,8 +233,6 @@ mod tests {
         println!("{}", payload);
 
         let roundabout: NativeQuery = serde_json::from_str(&payload).unwrap();
-
-        //assert!(roundabout == NativeQuery::Search);
 
         println!("{:?}", roundabout);
     }

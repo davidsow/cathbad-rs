@@ -10,9 +10,8 @@ pub enum LimitSpecType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(tag="type", rename_all="camelCase")]
 pub struct LimitSpec {
-    #[serde(rename = "type")]
-    type_: LimitSpecType,
     limit: Option<IntegerNumber>,
     offset: Option<IntegerNumber>,
     columns: Option<Vec<OrderByColumnSpec>>,
@@ -20,9 +19,8 @@ pub struct LimitSpec {
 
 impl QueryComponent for LimitSpec {
     fn validate_type(&self) -> bool {
-        match self.type_ {
-            LimitSpecType::Default => true, // this is redundant now but is future-proofing against new variants
-        }
+        //TODO
+        true
     }
 }
 

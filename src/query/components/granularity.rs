@@ -19,15 +19,8 @@ pub enum Granularity {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub enum GranularitySpecType {
-    GranularitySpec,
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(tag="type", rename_all="camelCase")]
 pub struct GranularitySpec {
-    #[serde(rename = "type")]
-    type_: GranularitySpecType,
     segment_granularity: Granularity,
     query_granularity: Granularity,
     rollup: Option<bool>,
@@ -36,8 +29,7 @@ pub struct GranularitySpec {
 
 impl QueryComponent for GranularitySpec {
     fn validate_type(&self) -> bool {
-        match self.type_ {
-            GranularitySpecType::GranularitySpec => true,
-        }
+        //TODO
+        true
     }
 }

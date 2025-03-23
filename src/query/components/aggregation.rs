@@ -2,60 +2,135 @@ use crate::query::Filter;
 use crate::query::components::model::QueryComponent;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Deserialize, Serialize, Eq, PartialEq)]
-#[serde(rename_all = "camelCase")]
-pub enum AggregationType {
-    Count,
-    JavaScript,
-    Filtered,
-    Grouping,
-
-    // Combined as "Statistical"
-    LongSum,
-    DoubleSum,
-    FloatSum,
-    DoubleMin,
-    DoubleMax,
-    FloatMin,
-    FloatMax,
-    LongMin,
-    LongMax,
-    DoubleMean,
-    DoubleFirst,
-    DoubleLast,
-    FloatFirst,
-    FloatLast,
-    LongFirst,
-    LongLast,
-    StringFirst,
-    StringLast,
-    DoubleAny,
-    FloatAny,
-    LongAny,
-    StringAny,
-}
-
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(untagged)]
+#[serde(tag="type", rename_all="camelCase")]
 pub enum Aggregation {
     Count {
-        #[serde(rename = "type")]
-        type_: AggregationType,
         name: String,
     },
 
     #[serde(rename_all = "camelCase")]
-    Statistical {
-        #[serde(rename = "type")]
-        type_: AggregationType,
+    DoubleSum {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    LongSum {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    FloatSum {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    DoubleMax {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    LongMax {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    FloatMax {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    DoubleMin {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    LongMin {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    FloatMin {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    DoubleMean {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    DoubleFirst {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    LongFirst {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    FloatFirst {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    DoubleLast {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    LongLast {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    FloatLast {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    DoubleAny {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    LongAny {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    FloatAny {
+        name: String,
+        field_name: String,
+    },
+
+    #[serde(rename_all = "camelCase")]
+    StringAny {
         name: String,
         field_name: String,
     },
 
     #[serde(rename_all = "camelCase")]
     JavaScript {
-        #[serde(rename = "type")]
-        type_: AggregationType,
         name: String,
         field_names: Vec<String>,
         fn_aggregate: String,
@@ -64,15 +139,11 @@ pub enum Aggregation {
     },
 
     Filtered {
-        #[serde(rename = "type")]
-        type_: AggregationType,
         filter: Filter,
         aggregator: Box<Aggregation>,
     },
 
     Grouping {
-        #[serde(rename = "type")]
-        type_: AggregationType,
         name: String,
         groupings: Vec<String>,
     },
@@ -81,35 +152,31 @@ pub enum Aggregation {
 impl QueryComponent for Aggregation {
     fn validate_type(&self) -> bool {
         match self {
-            Aggregation::Count { type_, .. } => *type_ == AggregationType::Count,
-            Aggregation::Statistical { type_, .. } => {
-                // TODO THERE HAS TO BE A BETTER WAY
-                *type_ == AggregationType::LongSum
-                    || *type_ == AggregationType::DoubleSum
-                    || *type_ == AggregationType::FloatSum
-                    || *type_ == AggregationType::DoubleMin
-                    || *type_ == AggregationType::DoubleMax
-                    || *type_ == AggregationType::FloatMin
-                    || *type_ == AggregationType::FloatMax
-                    || *type_ == AggregationType::LongMin
-                    || *type_ == AggregationType::LongMax
-                    || *type_ == AggregationType::DoubleMean
-                    || *type_ == AggregationType::DoubleFirst
-                    || *type_ == AggregationType::DoubleLast
-                    || *type_ == AggregationType::FloatFirst
-                    || *type_ == AggregationType::FloatLast
-                    || *type_ == AggregationType::LongFirst
-                    || *type_ == AggregationType::LongLast
-                    || *type_ == AggregationType::StringFirst
-                    || *type_ == AggregationType::StringLast
-                    || *type_ == AggregationType::DoubleAny
-                    || *type_ == AggregationType::FloatAny
-                    || *type_ == AggregationType::LongAny
-                    || *type_ == AggregationType::StringAny
-            }
-            Aggregation::JavaScript { type_, .. } => *type_ == AggregationType::JavaScript,
-            Aggregation::Filtered { type_, .. } => *type_ == AggregationType::Filtered,
-            Aggregation::Grouping { type_, .. } => *type_ == AggregationType::Grouping,
+            // TODO
+            Aggregation::Count { .. } => true,
+            Aggregation::DoubleSum { .. } => true,
+            Aggregation::LongSum { .. } => true,
+            Aggregation::FloatSum { .. } => true,
+            Aggregation::DoubleMax { .. } => true,
+            Aggregation::LongMax { .. } => true,
+            Aggregation::FloatMax { .. } => true,
+            Aggregation::DoubleMin { .. } => true,
+            Aggregation::LongMin { .. } => true,
+            Aggregation::FloatMin { .. } => true,
+            Aggregation::DoubleMean { .. } => true,
+            Aggregation::DoubleFirst { .. } => true,
+            Aggregation::LongFirst { .. } => true,
+            Aggregation::FloatFirst { .. } => true,
+            Aggregation::DoubleLast { .. } => true,
+            Aggregation::LongLast { .. } => true,
+            Aggregation::FloatLast { .. } => true,
+            Aggregation::DoubleAny { .. } => true,
+            Aggregation::LongAny { .. } => true,
+            Aggregation::FloatAny { .. } => true,
+            Aggregation::StringAny { .. } => true,
+            Aggregation::JavaScript { .. } => true,
+            Aggregation::Filtered { .. } => true,
+            Aggregation::Grouping { .. } => true,
         }
     }
 }
@@ -141,42 +208,53 @@ pub enum PostAggregationType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(untagged)]
+#[serde(tag="type", rename_all="camelCase")]
 pub enum PostAggregation {
     Arithmetic {
-        #[serde(rename = "type")]
-        type_: PostAggregationType,
         name: String,
+        #[serde(rename="fn")]
         fn_: String,
         fields: Vec<String>,
         ordering: Option<String>,
     },
 
-    FieldAccessor {
-        #[serde(rename = "type")]
-        type_: PostAggregationType,
+    FieldAccess {
         name: String,
         field_name: String,
     },
 
-    Bound {
-        #[serde(rename = "type")]
-        type_: PostAggregationType,
+    FinalizingFieldAccess {
+        name: String,
+        field_name: String,
+    },
+
+    DoubleGreatest {
+        name: String,
+        fields: Vec<String>,
+    },
+
+    LongGreatest {
+        name: String,
+        fields: Vec<String>,
+    },
+
+    DoubleLeast {
+        name: String,
+        fields: Vec<String>,
+    },
+
+    LongLeast {
         name: String,
         fields: Vec<String>,
     },
 
     JavaScript {
-        #[serde(rename = "type")]
-        type_: PostAggregationType,
         name: String,
         field_names: Vec<String>,
         function: String,
     },
 
     HyperUniqueCardinality {
-        #[serde(rename = "type")]
-        type_: PostAggregationType,
         name: String,
         field_name: String,
     },
@@ -184,22 +262,17 @@ pub enum PostAggregation {
 
 impl QueryComponent for PostAggregation {
     fn validate_type(&self) -> bool {
-        use PostAggregationType::*;
         match self {
-            PostAggregation::Arithmetic { type_, .. } => *type_ == Arithmetic,
-            PostAggregation::FieldAccessor { type_, .. } => {
-                *type_ == FieldAccess || *type_ == FinalizingFieldAccess
-            }
-            PostAggregation::Bound { type_, .. } => {
-                *type_ == DoubleGreatest
-                    || *type_ == LongGreatest
-                    || *type_ == DoubleLeast
-                    || *type_ == LongLeast
-            }
-            PostAggregation::JavaScript { type_, .. } => *type_ == JavaScript,
-            PostAggregation::HyperUniqueCardinality { type_, .. } => {
-                *type_ == HyperUniqueCardinality
-            }
+            // TODO
+            PostAggregation::Arithmetic { .. } => true,
+            PostAggregation::FieldAccess { .. } => true,
+            PostAggregation::FinalizingFieldAccess { .. } => true,
+            PostAggregation::DoubleGreatest { .. } => true,
+            PostAggregation::LongGreatest { .. } => true,
+            PostAggregation::DoubleLeast { .. } => true,
+            PostAggregation::LongLeast { .. } => true,
+            PostAggregation::JavaScript { .. } => true,
+            PostAggregation::HyperUniqueCardinality { .. } => true,
         }
     }
 }
