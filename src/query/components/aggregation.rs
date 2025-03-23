@@ -3,7 +3,7 @@ use crate::query::components::model::QueryComponent;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(tag="type", rename_all="camelCase")]
+#[serde(tag = "type", rename_all = "camelCase")]
 pub enum Aggregation {
     Count {
         name: String,
@@ -208,11 +208,11 @@ pub enum PostAggregationType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(tag="type", rename_all="camelCase")]
+#[serde(tag = "type", rename_all = "camelCase")]
 pub enum PostAggregation {
     Arithmetic {
         name: String,
-        #[serde(rename="fn")]
+        #[serde(rename = "fn")]
         fn_: String,
         fields: Vec<String>,
         ordering: Option<String>,

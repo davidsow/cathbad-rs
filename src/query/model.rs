@@ -28,7 +28,7 @@ pub enum NativeQueryType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(tag="queryType", rename_all="camelCase")]
+#[serde(tag = "queryType", rename_all = "camelCase")]
 pub enum NativeQuery {
     #[serde(rename_all = "camelCase")]
     Timeseries {

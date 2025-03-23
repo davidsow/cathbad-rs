@@ -2,7 +2,7 @@ use crate::query::components::model::QueryComponent;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(tag="type", rename_all="snake_case")]
+#[serde(tag = "type", rename_all = "snake_case")]
 pub enum SearchQuery {
     InsensitiveContains {
         value: String,

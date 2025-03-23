@@ -2,13 +2,11 @@ use crate::query::components::model::QueryComponent;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(tag="type", rename_all="camelCase")]
+#[serde(tag = "type", rename_all = "camelCase")]
 pub enum ToInclude {
     All,
     None,
-    List {
-        columns: Vec<String>,
-    },
+    List { columns: Vec<String> },
 }
 
 impl QueryComponent for ToInclude {

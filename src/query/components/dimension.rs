@@ -3,7 +3,7 @@ use crate::query::{ExtractionFunction, OutputType};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(tag="type", rename_all="camelCase")]
+#[serde(tag = "type", rename_all = "camelCase")]
 pub enum DimensionSpec {
     Default {
         dimension: String,

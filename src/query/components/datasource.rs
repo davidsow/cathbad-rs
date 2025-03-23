@@ -3,7 +3,7 @@ use crate::query::{Expression, NativeQuery, VirtualColumn};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(tag="type", rename_all="camelCase")]
+#[serde(tag = "type", rename_all = "camelCase")]
 pub enum DataSource {
     Table {
         name: String,

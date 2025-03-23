@@ -19,7 +19,7 @@ pub enum Granularity {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(tag="type", rename_all="camelCase")]
+#[serde(tag = "type", rename_all = "camelCase")]
 pub struct GranularitySpec {
     segment_granularity: Granularity,
     query_granularity: Granularity,

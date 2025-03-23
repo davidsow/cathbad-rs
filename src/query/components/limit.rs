@@ -10,7 +10,7 @@ pub enum LimitSpecType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(tag="type", rename_all="camelCase")]
+#[serde(tag = "type", rename_all = "camelCase")]
 pub struct LimitSpec {
     limit: Option<IntegerNumber>,
     offset: Option<IntegerNumber>,

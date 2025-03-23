@@ -2,9 +2,8 @@ use crate::query::components::model::QueryComponent;
 use crate::query::{Expression, OutputType};
 use serde::{Deserialize, Serialize};
 
-
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(tag="type", rename="camelCase")]
+#[serde(tag = "type", rename = "camelCase")]
 pub struct VirtualColumn {
     name: String,
     expression: Expression,

@@ -3,7 +3,7 @@ use crate::query::{DimensionSpec, Filter, FloatingPointNumber};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(tag="type", rename_all="camelCase")]
+#[serde(tag = "type", rename_all = "camelCase")]
 pub enum Having {
     Filter {
         filter: Filter,

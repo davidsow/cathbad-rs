@@ -3,7 +3,7 @@ use crate::query::{Granularity, IntegerNumber, SearchQuery};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(tag="type", rename_all="camelCase")]
+#[serde(tag = "type", rename_all = "camelCase")]
 pub enum ExtractionFunction {
     #[serde(rename_all = "camelCase")]
     Regex {
