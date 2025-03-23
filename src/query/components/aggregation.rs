@@ -121,6 +121,14 @@ impl QueryComponent for Aggregation {
     }
 }
 
+impl QueryComponent for Option<Aggregation> {
+    fn validate_type(&self) -> bool {
+        self.clone().is_none_or(|aggregation| {
+            aggregation.validate_type()
+        })
+    }
+}
+
 #[derive(Debug, Clone, Deserialize, Serialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub enum PostAggregationType {
@@ -204,5 +212,26 @@ impl QueryComponent for PostAggregation {
                 *type_ == PostAggregationType::HyperUniqueCardinality
             }
         }
+    }
+}
+
+impl QueryComponent for Option<PostAggregation> {
+    fn validate_type(&self) -> bool {
+        self.clone().is_none_or(|post_aggregation| {
+            post_aggregation.validate_type()
+        })
+    }
+}
+
+impl QueryComponent for Option<Vec<PostAggregation>> {
+    fn validate_type(&self) -> bool {
+        self.clone().is_none_or(|vector| {
+            for agg in vector {
+                if !agg.validate_type() {
+                    return false
+                }
+            }
+            true
+        })
     }
 }

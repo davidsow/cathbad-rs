@@ -164,3 +164,11 @@ impl QueryComponent for Filter {
         }
     }
 }
+
+impl QueryComponent for Option<Filter> {
+    fn validate_type(&self) -> bool {
+        self.clone().is_none_or(|filter| {
+            filter.validate_type()
+        })
+    }
+}

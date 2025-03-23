@@ -41,3 +41,16 @@ impl QueryComponent for ToInclude {
         }
     }
 }
+
+impl QueryComponent for Option<Vec<ToInclude>> {
+    fn validate_type(&self) -> bool {
+        self.clone().is_none_or(|include_vector| {
+            for to_include in include_vector {
+                if !to_include.validate_type() {
+                    return false
+                }
+            }
+            true
+        })
+    }
+}

@@ -96,3 +96,11 @@ impl QueryComponent for Having {
         }
     }
 }
+
+impl QueryComponent for Option<Having> {
+    fn validate_type(&self) -> bool {
+        self.clone().is_none_or(|having| {
+            having.validate_type()
+        })
+    }
+}

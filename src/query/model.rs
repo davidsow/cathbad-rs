@@ -9,7 +9,12 @@ use serde::{Deserialize, Serialize};
 pub type IntegerNumber = u64;
 pub type FloatingPointNumber = f64;
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
+pub trait TypeConstrainedQuery {
+    fn validate_type(&self) -> bool;
+    fn validate_subcomponents(&self) -> bool;
+}
+
+#[derive(Debug, Clone, Deserialize, Serialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub enum NativeQueryType {
     Timeseries,
@@ -41,7 +46,7 @@ pub enum NativeQuery {
     #[serde(rename_all = "camelCase")]
     TopN {
         query_type: NativeQueryType,
-        data_source: String,
+        data_source: DataSource,
         intervals: Vec<Interval>,
         granularity: Granularity,
         filter: Option<Filter>,
@@ -124,62 +129,80 @@ pub enum NativeQuery {
     },
 }
 
-#[derive(Default, Debug, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Context {
-    timeout: Option<IntegerNumber>,
-    priority: Option<IntegerNumber>,
-    lane: Option<IntegerNumber>,
-    query_id: Option<String>,
-    broker_service: Option<String>,
-    use_cache: Option<bool>,
-    populate_cache: Option<bool>,
-    use_result_level_cache: Option<bool>,
-    populate_result_level_cache: Option<bool>,
-    by_segment: Option<bool>,
-    finalize: Option<bool>,
-    max_scatter_gather_bytes: Option<IntegerNumber>,
-    max_queued_bytes: Option<IntegerNumber>,
-    serialize_date_time_as_long: Option<bool>,
-    serialize_date_time_as_long_inner: Option<bool>,
-    enable_parallel_merge: Option<bool>,
-    parallel_merge_parallelism: Option<IntegerNumber>,
-    parallel_merge_initial_yield_rows: Option<IntegerNumber>,
-    parallel_merge_small_batch_rows: Option<IntegerNumber>,
-    #[serde(rename = "useFilterCNF")]
-    use_filter_cnf: Option<bool>,
-    secondary_partition_pruning: Option<bool>,
-    enable_join_left_table_scan_direct: Option<bool>,
-    debug: Option<bool>,
-
-    // Query-Specific Parameters
-
-    // TopN
-    min_top_n_threshold: Option<IntegerNumber>,
-
-    // Timeseries
-    skip_empty_buckets: Option<bool>,
-
-    // GroupBy
-    // global
-    group_by_strategy: Option<String>,
-    group_by_is_single_thread: Option<bool>,
-    // v2
-    buffer_grouper_initial_buckets: Option<IntegerNumber>,
-    buffer_grouper_max_load_factor: Option<FloatingPointNumber>,
-    force_hash_aggregation: Option<bool>,
-    intermediate_combine_degree: Option<IntegerNumber>,
-    num_parallel_combine_threads: Option<IntegerNumber>,
-    apply_limit_push_down_to_segment: Option<bool>,
-    sort_by_dims_first: Option<bool>,
-    force_limit_push_down: Option<bool>,
-    // v1
-    max_intermediate_rows: Option<IntegerNumber>,
-    max_results: Option<IntegerNumber>,
-    use_of_heap: Option<bool>,
-
-    // Timeseries + GroupBy
-    vectorize: Option<bool>,
-    vector_size: Option<IntegerNumber>,
-    vectorize_virtual_columns: Option<bool>,
+impl TypeConstrainedQuery for NativeQuery {
+    fn validate_type(&self) -> bool {
+        match self {
+            NativeQuery::Timeseries { query_type,  .. } => {
+                *query_type == NativeQueryType::Timeseries
+            }
+            NativeQuery::TopN { query_type,  .. } => {
+                *query_type == NativeQueryType::TopN
+            }
+            NativeQuery::GroupBy { query_type,  .. } => {
+                *query_type == NativeQueryType::GroupBy
+            }
+            NativeQuery::TimeBoundary { query_type,  .. } => {
+                *query_type == NativeQueryType::TimeBoundary
+            }
+            NativeQuery::SegmentMetadata { query_type,  .. } => {
+                *query_type == NativeQueryType::SegmentMetadata
+            }
+            NativeQuery::DatasourceMetadata { query_type,  .. } => {
+                *query_type == NativeQueryType::DatasourceMetadata
+            }
+            NativeQuery::Scan { query_type,  .. } => {
+                *query_type == NativeQueryType::Scan
+            }
+            NativeQuery::Search { query_type,  .. } => {
+                *query_type == NativeQueryType::Search
+            }
+        }
+    }
+    fn validate_subcomponents(&self) -> bool {
+        match self {
+            NativeQuery::Timeseries { data_source, filter, aggregations, post_aggregations,  .. } => {
+                data_source.validate_type() &&
+                    filter.validate_type() &&
+                    aggregations.validate_type() &&
+                    post_aggregations.validate_type()
+            }
+            NativeQuery::TopN { data_source, filter, aggregations, post_aggregations, dimension, metric, .. } => {
+                data_source.validate_type() &&
+                    filter.validate_type() &&
+                    aggregations.validate_type() &&
+                    post_aggregations.validate_type() &&
+                    dimension.validate_type() &&
+                    metric.validate_type()
+            }
+            NativeQuery::GroupBy { data_source, dimensions, limit_spec, having, filter, aggregations, post_aggregations, .. } => {
+                data_source.validate_type() &&
+                    dimensions.validate_type() &&
+                    limit_spec.validate_type() &&
+                    having.validate_type() &&
+                    filter.validate_type() &&
+                    aggregations.validate_type() &&
+                    post_aggregations.validate_type()
+            }
+            NativeQuery::TimeBoundary { data_source, filter, .. } => {
+                data_source.validate_type() &&
+                    filter.validate_type()
+            }
+            NativeQuery::SegmentMetadata { data_source, to_include, .. } => {
+                data_source.validate_type() &&
+                    to_include.validate_type()
+            }
+            NativeQuery::DatasourceMetadata { data_source, .. } => {
+                data_source.validate_type()
+            }
+            NativeQuery::Scan { data_source, .. } => {
+                data_source.validate_type()
+            }
+            NativeQuery::Search { data_source, filter, query, .. } => {
+                data_source.validate_type() &&
+                    filter.validate_type() &&
+                    query.validate_type()
+            }
+        }
+    }
 }
+

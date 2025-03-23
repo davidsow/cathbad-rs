@@ -12,6 +12,7 @@ mod toinclude;
 mod topnmetric;
 mod virtualcolumn;
 mod model;
+mod context;
 
 pub use aggregation::*;
 pub use datasource::*;
@@ -26,3 +27,5 @@ pub use searchquery::*;
 pub use toinclude::*;
 pub use topnmetric::*;
 pub use virtualcolumn::*;
+pub use model::*;
+pub use context::*;

@@ -25,3 +25,11 @@ impl QueryComponent for LimitSpec {
         }
     }
 }
+
+impl QueryComponent for Option<LimitSpec> {
+    fn validate_type(&self) -> bool {
+        self.clone().is_none_or(|limit| {
+            limit.validate_type()
+        })
+    }
+}

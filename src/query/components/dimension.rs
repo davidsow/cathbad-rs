@@ -78,3 +78,14 @@ impl QueryComponent for DimensionSpec {
         }
     }
 }
+
+impl QueryComponent for Vec<DimensionSpec> {
+    fn validate_type(&self) -> bool {
+        for dim in self {
+            if !dim.validate_type() {
+                return false
+            }
+        }
+        true
+    }
+}
