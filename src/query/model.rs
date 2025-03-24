@@ -206,6 +206,20 @@ impl TypeConstrainedQuery for NativeQuery {
     }
 }
 
+#[derive(Debug, Clone, Deserialize, Serialize, Eq, PartialEq)]
+pub enum DruidQueryResponse {
+    Success {
+        // TODO
+    },
+    #[serde(untagged)]
+    Error {
+        error: String,
+        error_message: String,
+        error_class: String,
+        host: String,
+    },
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
